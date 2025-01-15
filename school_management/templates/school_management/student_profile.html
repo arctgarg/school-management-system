@@ -1,0 +1,173 @@
+{% extends "school_management/base.html" %}
+
+{% block title %}Student Profile - {{ student.first_name }}{% endblock %}
+
+{% block content %}
+<div class="student-profile">
+    <div class="profile-header">
+        <h1>Student Profile</h1>
+        <div class="student-basic-info">
+            <div class="info-group">
+                <h2>{{ student.first_name }} {{ student.last_name }}</h2>
+                <p class="admission-number">Admission No: {{ student.admission_number }}</p>
+            </div>
+            <div class="action-buttons">
+                <a href="{% url 'school_management:student_list' %}" class="button">Back to List</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-content">
+        <div class="personal-details card">
+            <h3>Personal Details</h3>
+            <table class="details-table">
+                <tr>
+                    <th>Date of Birth:</th>
+                    <td>{{ student.date_of_birth }}</td>
+                </tr>
+                <tr>
+                    <th>Admission Date:</th>
+                    <td>{{ student.admission_date }}</td>
+                </tr>
+                <tr>
+                    <th>Parent Name:</th>
+                    <td>{{ student.parent_name }}</td>
+                </tr>
+                <tr>
+                    <th>Contact Number:</th>
+                    <td>{{ student.contact_number }}</td>
+                </tr>
+                <tr>
+                    <th>Address:</th>
+                    <td>{{ student.address }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="academic-history card">
+            <h3>Academic History</h3>
+            {% for detail in enrollment_details %}
+            <div class="academic-year-section">
+                <h4>{{ detail.enrollment.academic_year.name }} - {{ detail.enrollment.grade.name }}</h4>
+                <div class="fee-summary">
+                    <table class="details-table">
+                        <tr>
+                            <th>Total Fee:</th>
+                            <td>₹{{ detail.enrollment.total_fee }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fee Paid:</th>
+                            <td>₹{{ detail.fee_paid }}</td>
+                        </tr>
+                        <tr>
+                            <th>Balance:</th>
+                            <td>₹{{ detail.fee_balance }}</td>
+                        </tr>
+                    </table>
+                    
+                    {% if detail.payments %}
+                    <div class="recent-payments">
+                        <h5>Recent Payments</h5>
+                        <table class="payments-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Receipt No</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in detail.payments %}
+                                <tr>
+                                    <td>{{ payment.payment_date }}</td>
+                                    <td>{{ payment.receipt_number }}</td>
+                                    <td>₹{{ payment.amount }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="actions">
+                        <a href="{% url 'school_management:student_fee_detail' detail.enrollment.id %}" class="button small">
+                            View Full Fee Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .student-profile {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .profile-header {
+        margin-bottom: 30px;
+    }
+    .student-basic-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .admission-number {
+        color: #666;
+        font-size: 1.1em;
+    }
+    .card {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .details-table {
+        width: 100%;
+        margin: 15px 0;
+    }
+    .details-table th {
+        width: 150px;
+        text-align: left;
+        padding: 8px;
+        color: #666;
+    }
+    .details-table td {
+        padding: 8px;
+    }
+    .academic-year-section {
+        border-bottom: 1px solid #eee;
+        padding: 20px 0;
+    }
+    .academic-year-section:last-child {
+        border-bottom: none;
+    }
+    .fee-summary {
+        margin-left: 20px;
+    }
+    .payments-table {
+        width: 100%;
+        margin: 15px 0;
+        font-size: 0.9em;
+    }
+    .payments-table th,
+    .payments-table td {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+    }
+    .recent-payments {
+        margin: 15px 0;
+    }
+    .actions {
+        margin-top: 15px;
+    }
+    .button.small {
+        font-size: 0.9em;
+        padding: 5px 10px;
+    }
+</style>
+{% endblock %}

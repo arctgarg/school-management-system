@@ -1,0 +1,17 @@
+{% extends "school_management/base.html" %}
+
+{% block content %}
+    <h1>School Dashboard</h1>
+    <div>
+        <p>Total Students: {{ total_students }}</p>
+        <p>Total Fee Collected: {{ total_fee_collected }}</p>
+    </div>
+    
+    <div>
+        <a href="{% url 'school_management:student_list' %}">View All Students</a> |
+        <a href="{% url 'school_management:student_admission' %}">Add New Student</a> |
+        <a href="{% url 'school_management:reports_dashboard' %}">Reports</a>
+    </div>
+    
+    <a href="{% url 'logout' %}">Logout</a>
+{% endblock %}

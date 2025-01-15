@@ -1,0 +1,110 @@
+{% extends "school_management/base.html" %}
+
+{% block title %}Collect Fee - {{ enrollment.student.first_name }}{% endblock %}
+
+{% block content %}
+<div class="collect-fee">
+    <h1>Collect Fee</h1>
+    
+    <div class="student-info">
+        <h2>{{ enrollment.student.first_name }} {{ enrollment.student.last_name }}</h2>
+        <p>Class: {{ enrollment.grade.name }}</p>
+        <p>Admission No: {{ enrollment.student.admission_number }}</p>
+    </div>
+
+    <div class="fee-summary">
+        <h3>Fee Summary</h3>
+        <table class="summary-table">
+            <tr>
+                <td>Total Annual Fee:</td>
+                <td>₹{{ enrollment.total_fee }}</td>
+            </tr>
+            <tr>
+                <td>Total Paid:</td>
+                <td>₹{{ fee_paid }}</td>
+            </tr>
+            <tr>
+                <td>Balance:</td>
+                <td>₹{{ fee_balance }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="payment-form">
+        <h3>Payment Details</h3>
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="error">{{ field.errors.0 }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="actions">
+                <button type="submit" class="button primary">Record Payment</button>
+                <a href="{% url 'school_management:student_fee_detail' enrollment.id %}" class="button">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .collect-fee {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .student-info {
+        margin-bottom: 30px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .error {
+        color: red;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+    .alert {
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+    }
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>
+{% endblock %}

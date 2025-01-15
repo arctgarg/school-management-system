@@ -1,0 +1,144 @@
+{% extends "school_management/base.html" %}
+
+{% block title %}Student List{% endblock %}
+
+{% block content %}
+<div class="student-list">
+    <h1>Student List</h1>
+    
+    <div class="filter-section">
+        <form method="get" class="filters">
+            <div class="filter-group">
+                <label for="academic_year">Academic Year:</label>
+                <select name="academic_year" id="academic_year">
+                    <option value="">All Years</option>
+                    {% for year in academic_years %}
+                    <option value="{{ year.id }}" {% if selected_year|stringformat:"s" == year.id|stringformat:"s" %}selected{% endif %}>
+                        {{ year.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="grade">Class:</label>
+                <select name="grade" id="grade">
+                    <option value="">All Classes</option>
+                    {% for grade in grades %}
+                    <option value="{{ grade.id }}" {% if selected_grade|stringformat:"s" == grade.id|stringformat:"s" %}selected{% endif %}>
+                        {{ grade.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="button">Apply Filters</button>
+        </form>
+    </div>
+
+    <table class="students-table">
+        <thead>
+            <tr>
+                <th>Admission No</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Academic Year</th>
+                <th>Parent Name</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.admission_number }}</td>
+                <td>{{ student.first_name }} {{ student.last_name }}</td>
+                <td>
+                    {% for enrollment in student.studentenrollment_set.all %}
+                        {% if selected_year %}
+                            {% if enrollment.academic_year.id|stringformat:"s" == selected_year %}
+                                {{ enrollment.grade.name }}
+                            {% endif %}
+                        {% else %}
+                            {% if enrollment.academic_year.is_active %}
+                                {{ enrollment.grade.name }}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for enrollment in student.studentenrollment_set.all %}
+                        {% if selected_year %}
+                            {% if enrollment.academic_year.id|stringformat:"s" == selected_year %}
+                                {{ enrollment.academic_year.name }}
+                            {% endif %}
+                        {% else %}
+                            {% if enrollment.academic_year.is_active %}
+                                {{ enrollment.academic_year.name }}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ student.parent_name }}</td>
+                <td>{{ student.contact_number }}</td>
+                <td>
+                    {% for enrollment in student.studentenrollment_set.all %}
+                        {% if selected_year %}
+                            {% if enrollment.academic_year.id|stringformat:"s" == selected_year %}
+                                <a href="{% url 'school_management:student_fee_detail' enrollment.id %}" class="button small">Fee Details</a>
+                            {% endif %}
+                        {% else %}
+                            {% if enrollment.academic_year.is_active %}
+                                <a href="{% url 'school_management:student_fee_detail' enrollment.id %}" class="button small">Fee Details</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    <a href="{% url 'school_management:student_profile' student.id %}" class="button small">View Profile</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center">No students found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .student-list {
+        padding: 20px;
+    }
+    .filter-section {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+    }
+    .filters {
+        display: flex;
+        gap: 15px;
+        align-items: flex-end;
+    }
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+    }
+    .filter-group label {
+        margin-bottom: 5px;
+    }
+    select {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-width: 150px;
+    }
+    .button.small {
+        padding: 5px 10px;
+        font-size: 0.9em;
+    }
+    .text-center {
+        text-align: center;
+    }
+</style>
+{% endblock %}
