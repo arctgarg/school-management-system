@@ -4,9 +4,19 @@ A Django-based school management system for educational institutions to manage s
 
 ## Features
 
-- **Student Management**: Admission, profiles, year/class-wise listing
-- **Fee Management**: Collection, payment history, defaulter tracking
-- **Reports & Analytics**: Collection statistics with visual charts
+### Student Management
+- Admission, profiles, year/class-wise listing
+<img src="screenshots/student_list.png" width="300" alt="Student List">
+<img src="screenshots/student_profile.png" width="300" alt="Student Profile">
+
+### Fee Management
+- Collection, payment history, defaulter tracking
+<img src="screenshots/fee_collection.png" width="300" alt="Fee Collection">
+<img src="screenshots/fee_details.png" width="300" alt="Fee Details">
+
+### Reports & Analytics
+- Collection statistics with visual charts
+<img src="screenshots/reports_dashboard.png" width="300" alt="Reports Dashboard">
 
 ## Tech Stack
 
