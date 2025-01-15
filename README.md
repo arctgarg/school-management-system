@@ -11,19 +11,12 @@ A Django-based school management system for educational institutions to manage s
 
 ### Fee Management
 - Collection, payment history, defaulter tracking
-<img src="screenshots/fee_collection.png" width="600" alt="Fee Collection">
+<img src="screenshots/fee_colection_form.png" width="600" alt="Fee Collection">
 <img src="screenshots/fee_details.png" width="600" alt="Fee Details">
 
 ### Reports & Analytics
 - Collection statistics with visual charts
 <img src="screenshots/reports_dashboard.png" width="600" alt="Reports Dashboard">
-
-## Tech Stack
-
-- Python 3.8+
-- Django 4.2
-- SQLite
-- Chart.js
 
 ## Setup
 
